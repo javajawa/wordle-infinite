@@ -211,6 +211,7 @@ class GameState {
 
 		if (currentAnswer.textContent === this.targetWord) {
 			this.showVictory();
+			return;
 		}
 
 		if (!this.getCurrentAnswerLine()) {
