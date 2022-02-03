@@ -268,8 +268,10 @@ class GameState {
 		if (e.animationName === "down") {
 			const row = elem.parentElement;
 			const position  = Array.prototype.indexOf.call(row.children, elem);
+			const state = this.getGuessState(row.textContent)[position];
 
-			elem.classList.add(this.getGuessState(row.textContent)[position]);
+			document.getElementById(elem.textContent).classList.add(state);
+			elem.classList.add(state);
 			elem.classList.add("animation-up");
 		}
 	}
