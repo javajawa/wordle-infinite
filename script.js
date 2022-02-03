@@ -266,22 +266,41 @@ class GameState {
 		}
 
 		if (e.animationName === "down") {
-			const character = elem.textContent;
-			const position  = Array.prototype.indexOf.call(elem.parentElement.children, elem);
+			const row = elem.parentElement;
+			const position  = Array.prototype.indexOf.call(row.children, elem);
 
-			if (this.targetWord[position] === character) {
-				elem.classList.add("correct");
-				document.getElementById(character).classList.add("correct");
-			} else if (this.targetWord.includes(character)) {
-				elem.classList.add("partial");
-				document.getElementById(character).classList.add("partial");
-			} else {
-				elem.classList.add("absent");
-				document.getElementById(character).classList.add("absent");
-			}
-
+			elem.classList.add(this.getGuessState(row.textContent)[position]);
 			elem.classList.add("animation-up");
 		}
+	}
+
+	getGuessState(line) {
+		const currentAnswer = line.split("");
+		const target = this.targetWord.split("");
+
+		let state = array(this.wordLength, () => "absent");
+
+		for (let i = 0; i < this.wordLength; ++i) {
+			if (currentAnswer[i] != target[i]) {
+				continue;
+			}
+			state[i] = "correct";
+			target[i] = "";
+		}
+
+		for (let i = 0; i < this.wordLength; ++i) {
+			if (state[i] == "correct") {
+				continue;
+			}
+			if (target.indexOf(currentAnswer[i]) === -1) {
+				continue;
+			}
+
+			state[i] = "partial";
+			target[target.indexOf(currentAnswer[i])] = "";
+		}
+
+		return state;
 	}
 
 	showVictory() {
